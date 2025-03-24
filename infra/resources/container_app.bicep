@@ -4,34 +4,34 @@ param location string = resourceGroup().location
 @description('Name of managed identity to use for Container Apps.')
 param managed_identity_name string
 
-param acr_name string
-
-param image string
-param port int = 7000
-
-param aoai_endpoint string
-param aoai_deployment string
-
-param search_endpoint string
-param search_index_name string
-
+// Language:
 param language_endpoint string
-
-param clu_project_name string
-param clu_deployment_name string
+param clu_project_name string = 'conv-assistant-clu'
+param clu_model_name string = 'clu-m1'
+param clu_deployment_name string = 'clu-m1-d1'
 param clu_confidence_threshold string = '0.5'
-
-param cqa_project_name string
-param cqa_deployment_name string
+param cqa_project_name string = 'conv-assistant-cqa'
+param cqa_deployment_name string = 'production'
 param cqa_confidence_threshold string = '0.5'
-
-param orchestration_project_name string
-param orchestration_deployment_name string
+param orchestration_project_name string = 'conv-assistant-orch'
+param orchestration_model_name string = 'orch-m1'
+param orchestration_deployment_name string = 'orch-m1-d1'
 param orchestration_confidence_threshold string = '0.5'
-
 param pii_enabled string = 'true'
 param pii_categories string = 'organization,person'
 param pii_confidence_threshold string = '0.5'
+
+// Search/AOAI:
+param aoai_endpoint string
+param aoai_deployment string
+param embedding_deployment_name string
+param embedding_model_name string
+param embedding_model_dimensions int
+param storage_account_name string
+param storage_account_connection_string string
+param blob_container_name string
+param search_endpoint string
+param search_index_name string = 'conv-assistant-manuals-idx'
 
 @allowed([
   'BYPASS'
@@ -41,12 +41,15 @@ param pii_confidence_threshold string = '0.5'
   'FUNCTION_CALLING'
 ])
 param router_type string = 'ORCHESTRATION'
+param image string = 'mcr.microsoft.com/azure-cli:cbl-mariner2.0'
+param port int = 7000
+param repo_clone_url string
 
 resource managed_identity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
   name: managed_identity_name
 }
 
-resource app_env 'Microsoft.App/managedEnvironments@2024-10-02-preview' = {
+resource app_environment 'Microsoft.App/managedEnvironments@2024-10-02-preview' = {
   name: 'cae-${uniqueString(resourceGroup().id)}'
   location: location
   properties: {
@@ -54,7 +57,7 @@ resource app_env 'Microsoft.App/managedEnvironments@2024-10-02-preview' = {
   }
 }
 
-resource conv_agent_app 'Microsoft.App/containerApps@2024-10-02-preview' = {
+resource container_app 'Microsoft.App/containerApps@2024-10-02-preview' = {
   name: 'ca-conv-agent-app'
   location: location
   identity: {
@@ -75,17 +78,27 @@ resource conv_agent_app 'Microsoft.App/containerApps@2024-10-02-preview' = {
         external: true
         targetPort: port
       }
-      registries: [
-        {
-          identity: managed_identity.id
-          server: '${acr_name}.azurecr.io'
-        }
-      ]
     }
-    managedEnvironmentId: app_env.id
+    managedEnvironmentId: app_environment.id
     template: {
+      scale: {
+        maxReplicas: 1
+        minReplicas: 1
+      }
       containers: [
         {
+          image: image
+          imageType: 'ContainerImage'
+          name: 'conv-agent-app'
+          resources: {
+            cpu: 1
+            memory: '2Gi'
+          }
+          command: [
+            '/bin/bash'
+            '-c'
+            'tdnf install -y git && git clone ${repo_clone_url} --single-branch repo_src && bash repo_src/infra/scripts/run_container_app.sh'
+          ]
           env: [
             {
               name: 'AOAI_ENDPOINT'
@@ -104,12 +117,40 @@ resource conv_agent_app 'Microsoft.App/containerApps@2024-10-02-preview' = {
               value: search_index_name
             }
             {
+              name: 'EMBEDDING_DEPLOYMENT_NAME'
+              value: embedding_deployment_name
+            }
+            {
+              name: 'EMBEDDING_MODEL_NAME'
+              value: embedding_model_name
+            }
+            {
+              name: 'EMBEDDING_MODEL_DIMENSIONS'
+              value: string(embedding_model_dimensions)
+            }
+            {
+              name: 'STORAGE_ACCOUNT_NAME'
+              value: storage_account_name
+            }
+            {
+              name: 'STORAGE_ACCOUNT_CONNECTION_STRING'
+              value: storage_account_connection_string
+            }
+            {
+              name: 'BLOB_CONTAINER_NAME'
+              value: blob_container_name
+            }
+            {
               name: 'LANGUAGE_ENDPOINT'
               value: language_endpoint
             }
             {
               name: 'CLU_PROJECT_NAME'
               value: clu_project_name
+            }
+            {
+              name: 'CLU_MODEL_NAME'
+              value: clu_model_name
             }
             {
               name: 'CLU_DEPLOYMENT_NAME'
@@ -136,6 +177,10 @@ resource conv_agent_app 'Microsoft.App/containerApps@2024-10-02-preview' = {
               value: orchestration_project_name
             }
             {
+              name: 'ORCHESTRATION_MODEL_NAME'
+              value: orchestration_model_name
+            }
+            {
               name: 'ORCHESTRATION_DEPLOYMENT_NAME'
               value: orchestration_deployment_name
             }
@@ -159,30 +204,11 @@ resource conv_agent_app 'Microsoft.App/containerApps@2024-10-02-preview' = {
               name: 'ROUTER_TYPE'
               value: router_type
             }
-            {
-              name: 'USE_MI_AUTH'
-              value: 'true'
-            }
-            {
-              name: 'MI_CLIENT_ID'
-              value: managed_identity.properties.clientId
-            }
           ]
-          image: image
-          imageType: 'ContainerImage'
-          name: 'conv-agent-app'
-          resources: {
-            cpu: 1
-            memory: '2Gi'
-          }
         }
       ]
-      scale: {
-        maxReplicas: 1
-        minReplicas: 1
-      }
     }
   }
 }
 
-output fqdn string = conv_agent_app.properties.configuration.ingress.fqdn
+output fqdn string = container_app.properties.configuration.ingress.fqdn
