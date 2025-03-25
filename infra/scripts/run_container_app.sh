@@ -44,6 +44,6 @@ echo "Running app..."
 cd ${backend_dir}
 python3 -m pip install -r requirements.txt
 cd src
-cp ${frontend_dir}/dist .
+cp -r ${frontend_dir}/dist .
 
-python3 -m flask --app server run --host=0.0.0.0 --port 7000
+python3 -m flask --app server run --host=0.0.0.0 --port 443
