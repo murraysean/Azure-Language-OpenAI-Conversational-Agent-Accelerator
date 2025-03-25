@@ -46,4 +46,4 @@ python3 -m pip install -r requirements.txt
 cd src
 cp -r ${frontend_dir}/dist .
 
-python3 -m flask --app server run --host=0.0.0.0 --port 443
+python3 -m flask --app server run --host=0.0.0.0 --port 80
