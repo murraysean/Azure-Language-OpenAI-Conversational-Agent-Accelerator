@@ -16,8 +16,9 @@ cd ${script_dir}
 # Ensure pip:
 python3 -m ensurepip --upgrade
 
-# Install tar:
+# Install deps:
 tdnf install -y tar
+tdnf install -y awk
 
 # Install nodejs:
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
