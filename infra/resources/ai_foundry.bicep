@@ -42,7 +42,7 @@ param embedding_model_dimensions int = 1536
 param embedding_deployment_type string
 
 // Search service:
-@description('Name of AI Search resource')
+@description('Name of Foundry IQ resource')
 param search_service_name string
 
 resource search_service 'Microsoft.Search/searchServices@2023-11-01' existing = {

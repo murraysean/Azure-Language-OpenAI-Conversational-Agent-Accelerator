@@ -6,7 +6,7 @@ from azure.ai.textanalytics import TextAnalyticsClient
 from utils import get_azure_credential
 
 """
-Azure AI Language PII recognition, redaction, and reconstruction.
+Azure Language PII recognition, redaction, and reconstruction.
 """
 
 CATEGORIES = os.environ.get("PII_CATEGORIES", "").upper().split(",")

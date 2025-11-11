@@ -1,7 +1,7 @@
 ### Azure Language OpenAI Conversational Agent Accelerator: Responsible AI FAQ
 
 - **What is `Azure-Language-OpenAI-Conversational-Agent-Accelerator`?**
-    - The `Azure-Language-OpenAI-Conversational-Agent-Accelerator` project provides users with a code-first example on how to augment an existing RAG solution with Azure AI Language functionality. The system takes as input user chat messages (grounded within a specific context). The system orchestrates user chats to Azure AI Langauge CLU or CQA projects, or to a fallback RAG agent. Output is a system chat message, which may be the answer to a question in a CQA project, the result of a linked intent in a CLU project, or a general grounded response from RAG.
+    - The `Azure-Language-OpenAI-Conversational-Agent-Accelerator` project provides users with a code-first example on how to augment an existing RAG solution with Azure Language functionality. The system takes as input user chat messages (grounded within a specific context). The system orchestrates user chats to Azure AI Langauge CLU or CQA projects, or to a fallback RAG agent. Output is a system chat message, which may be the answer to a question in a CQA project, the result of a linked intent in a CLU project, or a general grounded response from RAG.
 
 - **What can `Azure-Language-OpenAI-Conversational-Agent-Accelerator` do?**
     - Overall, the demo provided with this proejct showcases the following chat experience:
@@ -12,7 +12,7 @@
         - Agent summaries response (what business action was performed, provide answer to question, provide grounded response).
 
 - **What is `Azure-Language-OpenAI-Conversational-Agent-Accelerator`'s intended uses?**
-    - The `Azure-Language-OpenAI-Conversational-Agent-Accelerator` project is intended to display the "better together" story when using Azure AI Language and Azure OpenAI. This chat experience includes single-turn chatting, QA, and groundedness. When combined with an existing RAG solution, adding a `UnifiedConversationOrchestrator` object can help in the following ways:
+    - The `Azure-Language-OpenAI-Conversational-Agent-Accelerator` project is intended to display the "better together" story when using Azure Language and Azure OpenAI. This chat experience includes single-turn chatting, QA, and groundedness. When combined with an existing RAG solution, adding a `UnifiedConversationOrchestrator` object can help in the following ways:
         - manual overrides of DSAT examples using CQA.
         - extended chat functionality based on recognized intents/entities using CLU.
         - consistent fallback to original chat functionality with RAG.

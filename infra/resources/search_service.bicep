@@ -1,7 +1,7 @@
 @description('Resource name suffix.')
 param suffix string
 
-@description('Name of AI Search resource.')
+@description('Name of Foundry IQ resource.')
 param name string = 'srch-${suffix}'
 
 @description('Location for all resources.')

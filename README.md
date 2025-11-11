@@ -2,7 +2,7 @@
 | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure-Samples/Azure-Language-OpenAI-Conversational-Agent-Accelerator) | [![Open in Dev Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Azure-Samples/Azure-Language-OpenAI-Conversational-Agent-Accelerator) |
 |---|---|
 
-This accelerator template provides users with a code-first example for creating and enhancing chat solutions and agents with deterministic, human-controllable workflows. It is designed to minimize the need for extensive prompt engineering by using a structured workflow to prioritize top questions with exact answers, top intents with deterministic routing, and use LLM to handle long tail topics. These actions help to ensure determinism and consistency. The template also provides flexibility to swap, add, or remove agents/components to tailor to your specific needs.
+This accelerator template utilizes Foundry Agent Service and Foundry Tools to provide users with a code-first example for creating and enhancing chat solutions and agents with deterministic, human-controllable workflows. It is designed to minimize the need for extensive prompt engineering by using a structured workflow to prioritize top questions with exact answers, top intents with deterministic routing, and use LLM to handle long tail topics. These actions help to ensure determinism and consistency. The template also provides flexibility to swap, add, or remove agents/components to tailor to your specific needs.
 
 This template is perfect for developers and organizations looking to design, customize, and manage agents that can handle complex queries, route tasks, and provide reliable answers, all with a controlled, scalable architecture.
 
@@ -11,14 +11,14 @@ This template is perfect for developers and organizations looking to design, cus
 
 ## Important Notice
 
-With any AI solutions you create using these templates, you are responsible for assessing all associated risks, and for complying with all applicable laws and safety standards. Learn more in the transparency documents for [Agent Service](https://learn.microsoft.com/en-us/azure/ai-foundry/responsible-ai/agents/transparency-note) and [Agent Framework](https://github.com/microsoft/agent-framework/blob/main/TRANSPARENCY_FAQ.md).
+With any AI solutions you create using these templates, you are responsible for assessing all associated risks, and for complying with all applicable laws and safety standards. Learn more in the transparency documents for [Foundry Agent Service](https://learn.microsoft.com/en-us/azure/ai-foundry/responsible-ai/agents/transparency-note) and [Agent Framework](https://github.com/microsoft/agent-framework/blob/main/TRANSPARENCY_FAQ.md).
 
 
 This template, the application code and configuration it contains, have been built to showcase Microsoft Azure specific services and tools. We strongly advise our customers not to make this code part of their production environments without implementing or enabling additional security features.
 
 ## Features
 
-This solution leverages the combined capabilities of Azure AI Language, Azure AI Agent Service and Azure OpenAI for enhanced conversational agent solutions. The following image is a reference architecture diagram of this Agent template.
+This solution leverages the combined capabilities of Azure Language, Foundry Agent Service and Azure OpenAI for enhanced conversational agent solutions. The following image is a reference architecture diagram of this Agent template.
 
 ![image](./docs/images/sk_flow_translate.png)
 
@@ -26,12 +26,12 @@ This solution leverages the combined capabilities of Azure AI Language, Azure AI
 2. **Orchestrator:** The orchestrator allows for a dynamic, adaptable workflow with multiple orchestration options including utilizing Semantic Kernel's group chat orchestration with an intent routing agent (based on [this template](https://github.com/azure-ai-foundry/foundry-samples/tree/main/samples/agent-catalog/msft-agent-samples/foundry-agent-service-sdk/intent-routing-agent)) as the manager agent to moderate and route the conversation, LLM function calling, CLU for intent identification only and CQA for returning exact pre-set answers only, etc. Both intent routing agent and LLM function calling options leverages CLU and CQA to provide high-quality intent identficiation and exact question-answering. See the routing strategies section down below for more details between these options. 
 3. **Conversational Language Understanding (CLU):** CLU enables you to define the top intents to ensure response quality. Whether completing a task or addressing specific customer needs, CLU provides a mechanism to ensure the agent accurately understands and executes the process of handling predefined intents. You can update the top intents as necessary to accommodate evolving business needs. Check out [the CLU product documents](https://learn.microsoft.com/azure/ai-services/language-service/conversational-language-understanding/overview) for more details.
 4. **Custom Question Answering (CQA):** CQA allows you to create and manage predefined QA pairs to deliver precise responses. CQA can respond consistently, improving reliability, particularly for high-stakes or regulatory-sensitive conversations. You can update the predefined QA pairs as needed to match your growing business needs. Check out [the CQA product documents](https://learn.microsoft.com/azure/ai-services/language-service/question-answering/overview) for more details.
-5. **PII Detection and Redaction (PII):** Protecting user privacy is a top priority. Azure AI Language’s Personally Identifiable Information (PII) can identify and redact sensitive information before sending to LLM for processing. Check out [the PII product documents](https://learn.microsoft.com/azure/ai-services/language-service/personally-identifiable-information/overview?tabs=text-pii) for more details.
-6. **Large Language Model with Retrieval-Augmented Generation (LLM with RAG) to Handle Everything Else:** In this template, we are showcasing a RAG solution using Azure AI Search to handle missed intents or user queries on lower-priority topics. This RAG solution can be replaced with your existing one.  
+5. **PII Detection and Redaction (PII):** Protecting user privacy is a top priority. Azure Language’s Personally Identifiable Information (PII) can identify and redact sensitive information before sending to LLM for processing. Check out [the PII product documents](https://learn.microsoft.com/azure/ai-services/language-service/personally-identifiable-information/overview?tabs=text-pii) for more details.
+6. **Large Language Model with Retrieval-Augmented Generation (LLM with RAG) to Handle Everything Else:** In this template, we are showcasing a RAG solution using Foundry IQ to handle missed intents or user queries on lower-priority topics. This RAG solution can be replaced with your existing one.  
 7. **Template Configuration for "Plug-and-Play":** The template is designed to allow you to easily swap, add, or remove components to tailor to your specific needs. Whether you want to add custom intents, adjust fallback mechanisms, or incorporate additional data sources, the modular nature of this template makes it simple to configure.
 
 ### Benefits
-Azure AI Language already offers two services: Conversational Language Understanding (CLU) and Custom Question Answering (CQA). CLU analyzes user inputs to extract intents and entities. CQA uses pre-defined question-answer pairs or a pre-configured knowledgebase to answer user questions.
+Azure Language already offers two services: Conversational Language Understanding (CLU) and Custom Question Answering (CQA). CLU analyzes user inputs to extract intents and entities. CQA uses pre-defined question-answer pairs or a pre-configured knowledgebase to answer user questions.
 #### How CLU can help
 A common issue with intent prediction in conversational AI is the misclassification of user intents and inaccurate entity identification. This can lead to poor user experience due to inaccurately invoked AI Agents or custom actions for intent fulfillment.  
 
@@ -39,11 +39,11 @@ CLU can help by performing easy-to-configure and intuitive model training to map
 
 By leveraging CLU, users can enhance their conversational AI solutions, improve intent predication accuracy, making it a valuable agent/workflow routing solution.
 #### How CQA can help
-A typical RAG solution allows users to chat with an AI agent and obtain grounded responses. Chat messages are sent directly to AOAI, where a specified model (e.g. GPT-4o) processes each message and creates a response. This is beneficial when customers have their own grounding data (e.g. product manuals, company information for Q/A). They would set up an Azure AI Search index to query their grounding data, and preprocess user chat messages by fetching relevant grounding data and passing it to the AOAI model downstream. Because the model now "knows" the grounding data to base its response around, user chats are met with contextual responses, improving the chat experience.
+A typical RAG solution allows users to chat with an AI agent and obtain grounded responses. Chat messages are sent directly to AOAI, where a specified model (e.g. GPT-4o) processes each message and creates a response. This is beneficial when customers have their own grounding data (e.g. product manuals, company information for Q/A). They would set up a Foundry IQ index to query their grounding data, and preprocess user chat messages by fetching relevant grounding data and passing it to the AOAI model downstream. Because the model now "knows" the grounding data to base its response around, user chats are met with contextual responses, improving the chat experience.
 
 However, issues with RAG solutions (DSATs, or dissatisfactory examples) are hard to address. It is difficult to debug or update grounding data to fix inaccurate "grounded" responses. Further, this process can be expensive and time-consuming
 
-Azure AI Language CQA can help address these issues and expand the functionality of existing RAG chat solutions. 
+Azure Language CQA can help address these issues and expand the functionality of existing RAG chat solutions. 
 
 ## Agent Architecture
 ![image](./docs/images/architecture.png)
@@ -75,7 +75,7 @@ Incorporating CLU/CQA (through an intent routing agent or LLM function calls) us
 
 ![image](./docs/images/ui.png)
 
-This displays the "better together" story when using Azure AI Language with Azure AI Agent Service and/or Azure OpenAI to provide a deterministic conversational agent experience. Learn more about related offerings from this blog post: [Announcing Azure AI Language new features to accelerate your agent development](https://techcommunity.microsoft.com/blog/azure-ai-services-blog/announcing-azure-ai-language-new-features-to-accelerate-your-agent-development/4415216).
+This displays the "better together" story when using Azure Language with Foundry Agent Service and/or Azure OpenAI to provide a deterministic conversational agent experience. Learn more about related offerings from this blog post: [Announcing Azure Language new features to accelerate your agent development](https://techcommunity.microsoft.com/blog/azure-ai-services-blog/announcing-azure-ai-language-new-features-to-accelerate-your-agent-development/4415216).
 
 ## Notes:
 **GenAI is used in the following contexts:**
@@ -90,7 +90,7 @@ This displays the "better together" story when using Azure AI Language with Azur
 - `FUNCTION_CALLING`: Route to either `CLU` or `CQA` runtime using AOAI GPT function-calling to decide.
 - `CLU`: Route to `CLU` runtime only.
 - `CQA`: Route to `CQA` runtime only.
-- `ORCHESTRATION`: Route to either `CQA` or `CLU` runtime using an Azure AI Language [Orchestration](https://learn.microsoft.com/en-us/azure/ai-services/language-service/orchestration-workflow/overview) project to decide.
+- `ORCHESTRATION`: Route to either `CQA` or `CLU` runtime using an Azure Language [Orchestration](https://learn.microsoft.com/en-us/azure/ai-services/language-service/orchestration-workflow/overview) project to decide.
 - `BYPASS`: No routing. Only call fallback function.
 
 In any case, the fallback function is called if routing "failed". `CLU` route is considered "failed" is confidence threshold is not met or no intent is recognized. `CQA` route is considered "failed" if confidence threhsold is not met or no answer is found. `TRIAGE_AGENT`, `FUNCTION_CALLING` and `ORCHESTRATION` route depend on the return value of the runtime they call.
@@ -301,11 +301,11 @@ However, Azure Container Registry has a fixed cost per registry per day.
 
 You can try the [Azure pricing calculator](https://azure.microsoft.com/en-us/pricing/calculator) for the resources:
 
-* Azure AI Search: Standard tier, S1. Pricing is based on the number of documents and operations. [Pricing](https://azure.microsoft.com/pricing/details/search/)
+* Foundry IQ: Standard tier, S1. Pricing is based on the number of documents and operations. [Pricing](https://azure.microsoft.com/pricing/details/search/)
 * Azure Storage Account: Standard tier, LRS. Pricing is based on storage and operations. [Pricing](https://azure.microsoft.com/pricing/details/storage/blobs/)
 * Azure OpenAI: S0 tier, defaults to gpt-4o-mini and text-embedding-ada-002 models. Pricing is based on token count. [Pricing](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/?msockid=3d25d5a7fe346936111ec024ff8e685c)
 * Azure Container Instances: Pay as you go. Container has default settings of 1 vCPU and 1 GB. [Pricing](https://azure.microsoft.com/en-us/pricing/details/container-instances/?msockid=3d25d5a7fe346936111ec024ff8e685c)
-* Azure AI Language: S tier. [Pricing](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/language-service/?msockid=3d25d5a7fe346936111ec024ff8e685c)
+* Azure Language: S tier. [Pricing](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/language-service/?msockid=3d25d5a7fe346936111ec024ff8e685c)
 
 
 ⚠️ To avoid unnecessary costs, remember to take down your app if it's no longer in use,
@@ -324,9 +324,9 @@ You may want to consider additional security measures, such as:
 ## Resources
 Supporting documentation:
 - [Azure OpenAI](https://learn.microsoft.com/en-us/azure/ai-services/openai/overview)
-- [Azure AI Search](https://learn.microsoft.com/en-us/azure/search/) 
+- [Foundry IQ](https://learn.microsoft.com/en-us/azure/search/) 
 - [Azure Container Instances](https://learn.microsoft.com/en-us/azure/container-instances/)
-- [Azure AI Language](https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview)
+- [Azure Language](https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview)
 - [CLU](https://learn.microsoft.com/en-us/azure/ai-services/language-service/conversational-language-understanding/overview)
 - [CQA](https://learn.microsoft.com/en-us/azure/ai-services/language-service/question-answering/overview)
 
@@ -348,4 +348,4 @@ This project may contain trademarks or logos for projects, products, or services
 The software may collect information about you and your use of the software and send it to Microsoft. Microsoft may use this information to provide services and improve our products and services. You may turn off the telemetry as described in the repository. There are also some features in the software that may enable you and Microsoft to collect data from users of your applications. If you use these features, you must comply with applicable law, including providing appropriate notices to users of your applications together with a copy of Microsoft’s privacy statement. Our privacy statement is located at https://go.microsoft.com/fwlink/?LinkID=824704. You can learn more about data collection and use in the help documentation and our privacy statement. Your use of the software operates as your consent to these practices.
 
 **Note**: 
-- No telemetry or data collection is directly added in this accelerator project. Please review individual telemetry information from the included Azure services (e.g. Azure AI Language, Azure OpenAI etc.) regarding their APIs.
+- No telemetry or data collection is directly added in this accelerator project. Please review individual telemetry information from the included Azure services (e.g. Azure Language, Azure OpenAI etc.) regarding their APIs.
